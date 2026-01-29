@@ -28,8 +28,8 @@ A modern Angular application for viewing and exploring blockchain transactions f
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd blockchain-viewer
+   git clone git@github.com:Incept5/blockchain-viewer-angular.git
+   cd blockchain-viewer-angular
    ```
 
 2. **Install dependencies**
