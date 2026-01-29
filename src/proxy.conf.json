@@ -1,0 +1,11 @@
+{
+  "/api": {
+    "target": "https://api.linguard-sandbox.incept5.dev",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": "/api"
+    },
+    "logLevel": "debug"
+  }
+}
