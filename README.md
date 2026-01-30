@@ -71,6 +71,28 @@ npm start
 
 Runs the app in development mode with a proxy to handle CORS. The app will automatically reload when you make changes.
 
+### Network access (remote devices)
+
+To access the dev server from other devices on your network (e.g., mobile testing, Tailscale):
+
+```bash
+npm start -- --host 0.0.0.0
+```
+
+You'll also need to add your hostname to the `allowedHosts` in `angular.json`:
+
+```json
+"serve": {
+  "options": {
+    "allowedHosts": [
+      "localhost",
+      "your-hostname",
+      "your-hostname.tailnet-name.ts.net"
+    ]
+  }
+}
+```
+
 ### Build for production
 
 ```bash
