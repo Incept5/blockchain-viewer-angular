@@ -19,30 +19,46 @@ import { ThemeService } from '../../services/theme.service';
             </svg>
           </div>
           <div class="title-section">
-            <h1>Linguard Blockchain Viewer</h1>
-            <span class="subtitle">Passporting API Explorer</span>
+            <h1>Linguard <span class="hide-mobile">Blockchain Viewer</span></h1>
+            <span class="subtitle hide-mobile">Passporting API Explorer</span>
           </div>
         </div>
 
         <div class="actions-section">
-          <div class="search-box">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="M21 21l-4.35-4.35"/>
-            </svg>
-            <input
-              type="text"
-              placeholder="Search by name..."
-              [ngModel]="searchTerm"
-              (ngModelChange)="onSearchChange($event)"
-            />
-            <button *ngIf="searchTerm" class="clear-btn" (click)="onClearSearch()" title="Clear search">
+          <div class="search-box" [class.expanded]="searchExpanded">
+            <button class="search-toggle" (click)="toggleSearch()" *ngIf="!searchExpanded">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M15 9l-6 6"/>
-                <path d="M9 9l6 6"/>
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
               </svg>
             </button>
+            <div class="search-input-wrapper" *ngIf="searchExpanded || !isMobile">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <input
+                #searchInput
+                type="text"
+                placeholder="Search by name..."
+                [ngModel]="searchTerm"
+                (ngModelChange)="onSearchChange($event)"
+                (blur)="onSearchBlur()"
+              />
+              <button *ngIf="searchTerm" class="clear-btn" (click)="onClearSearch()" title="Clear search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M15 9l-6 6"/>
+                  <path d="M9 9l6 6"/>
+                </svg>
+              </button>
+              <button *ngIf="isMobile && !searchTerm" class="clear-btn" (click)="closeSearch()" title="Close search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 6L6 18"/>
+                  <path d="M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
           </div>
 
           <button class="sort-btn" (click)="onSortToggle()" [title]="sortOrder === 'newest' ? 'Showing newest first' : 'Showing oldest first'">
@@ -54,7 +70,7 @@ import { ThemeService } from '../../services/theme.service';
               <path d="M12 19V5"/>
               <path d="M5 12l7-7 7 7"/>
             </svg>
-            <span>{{ sortOrder === 'newest' ? 'Newest' : 'Oldest' }}</span>
+            <span class="hide-mobile">{{ sortOrder === 'newest' ? 'Newest' : 'Oldest' }}</span>
           </button>
 
           <button class="refresh-btn" (click)="onRefresh()" [disabled]="loading">
@@ -64,7 +80,7 @@ import { ThemeService } from '../../services/theme.service';
               <path d="M3.51 9a9 9 0 0114.85-3.36L23 10"/>
               <path d="M20.49 15a9 9 0 01-14.85 3.36L1 14"/>
             </svg>
-            <span>Refresh</span>
+            <span class="hide-mobile">Refresh</span>
           </button>
 
           <button class="theme-toggle" (click)="onThemeToggle()" [title]="themeService.theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
@@ -106,13 +122,14 @@ import { ThemeService } from '../../services/theme.service';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 2rem;
+      gap: 1rem;
     }
 
     .logo-section {
       display: flex;
       align-items: center;
       gap: 1rem;
+      flex-shrink: 0;
     }
 
     .logo {
@@ -124,6 +141,7 @@ import { ThemeService } from '../../services/theme.service';
       align-items: center;
       justify-content: center;
       padding: 10px;
+      flex-shrink: 0;
 
       svg {
         width: 100%;
@@ -139,6 +157,7 @@ import { ThemeService } from '../../services/theme.service';
         font-weight: 600;
         color: var(--text-primary);
         letter-spacing: -0.5px;
+        white-space: nowrap;
       }
 
       .subtitle {
@@ -150,13 +169,44 @@ import { ThemeService } from '../../services/theme.service';
     .actions-section {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
+      flex-wrap: nowrap;
     }
 
     .search-box {
       position: relative;
       display: flex;
       align-items: center;
+
+      .search-toggle {
+        display: none;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        background: var(--input-bg);
+        border: 1px solid var(--input-border);
+        border-radius: 8px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover {
+          background: var(--input-bg-focus);
+          border-color: var(--input-border-hover);
+        }
+      }
+
+      .search-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
 
       .search-icon {
         position: absolute;
@@ -288,6 +338,7 @@ import { ThemeService } from '../../services/theme.service';
       color: var(--text-secondary);
       cursor: pointer;
       transition: all 0.2s ease;
+      flex-shrink: 0;
 
       svg {
         width: 20px;
@@ -306,18 +357,137 @@ import { ThemeService } from '../../services/theme.service';
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 768px) {
+    /* Tablet */
+    @media (max-width: 1024px) {
       .header {
-        padding: 1rem;
-      }
-
-      .header-content {
-        flex-direction: column;
-        gap: 1rem;
+        padding: 0.875rem 1.5rem;
       }
 
       .search-box input {
         width: 200px;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .header {
+        padding: 0.75rem 1rem;
+      }
+
+      .logo {
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        border-radius: 10px;
+      }
+
+      .title-section h1 {
+        font-size: 1.125rem;
+      }
+
+      .hide-mobile {
+        display: none !important;
+      }
+
+      .actions-section {
+        gap: 0.5rem;
+      }
+
+      .search-box {
+        .search-toggle {
+          display: flex;
+        }
+
+        .search-input-wrapper {
+          display: none;
+        }
+
+        &.expanded {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          padding: 0.75rem 1rem;
+          background: var(--bg-secondary);
+          border-bottom: 1px solid var(--border-primary);
+          z-index: 200;
+
+          .search-toggle {
+            display: none;
+          }
+
+          .search-input-wrapper {
+            display: flex;
+            width: 100%;
+          }
+
+          input {
+            width: 100%;
+          }
+        }
+      }
+
+      .sort-btn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .refresh-btn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        justify-content: center;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .theme-toggle {
+        width: 36px;
+        height: 36px;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+
+    /* Small mobile */
+    @media (max-width: 380px) {
+      .logo-section {
+        gap: 0.5rem;
+      }
+
+      .logo {
+        width: 36px;
+        height: 36px;
+        padding: 7px;
+      }
+
+      .title-section h1 {
+        font-size: 1rem;
+      }
+
+      .actions-section {
+        gap: 0.375rem;
+      }
+
+      .sort-btn,
+      .refresh-btn,
+      .theme-toggle,
+      .search-box .search-toggle {
+        width: 36px;
+        height: 36px;
       }
     }
   `]
@@ -331,6 +501,45 @@ export class HeaderComponent {
   @Output() searchChange = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<'newest' | 'oldest'>();
   @Output() refresh = new EventEmitter<void>();
+
+  searchExpanded = false;
+  isMobile = false;
+
+  constructor() {
+    this.checkMobile();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', () => this.checkMobile());
+    }
+  }
+
+  private checkMobile(): void {
+    if (typeof window !== 'undefined') {
+      this.isMobile = window.innerWidth <= 768;
+      if (!this.isMobile) {
+        this.searchExpanded = false;
+      }
+    }
+  }
+
+  toggleSearch(): void {
+    this.searchExpanded = true;
+    setTimeout(() => {
+      const input = document.querySelector('.search-input-wrapper input') as HTMLInputElement;
+      if (input) input.focus();
+    }, 100);
+  }
+
+  closeSearch(): void {
+    this.searchExpanded = false;
+  }
+
+  onSearchBlur(): void {
+    if (this.isMobile && !this.searchTerm) {
+      setTimeout(() => {
+        this.searchExpanded = false;
+      }, 200);
+    }
+  }
 
   onSearchChange(term: string): void {
     this.searchChange.emit(term);

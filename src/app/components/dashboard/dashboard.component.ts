@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject, takeUntil, combineLatest, BehaviorSubject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { BlockchainService } from '../../services/blockchain.service';
 import { Transaction, TransactionStats } from '../../models/transaction.model';
 import { HeaderComponent } from '../header/header.component';
@@ -17,7 +17,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
     TransactionDetailComponent
   ],
   template: `
-    <div class="dashboard">
+    <div class="dashboard" [class.detail-open]="selectedTransaction">
       <app-header
         [searchTerm]="searchTerm"
         [loading]="loading"
@@ -30,7 +30,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
       <main class="main-content">
         <!-- Stats Cards -->
         <div class="stats-section">
-          <div class="stat-card total">
+          <div class="stat-card total" (click)="filterByType('ALL')">
             <div class="stat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -40,7 +40,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
             </div>
             <div class="stat-content">
               <span class="stat-value">{{ stats.total }}</span>
-              <span class="stat-label">Total Transactions</span>
+              <span class="stat-label">Total</span>
             </div>
           </div>
 
@@ -53,7 +53,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
             </div>
             <div class="stat-content">
               <span class="stat-value">{{ stats.kyc }}</span>
-              <span class="stat-label">KYC Records</span>
+              <span class="stat-label">KYC</span>
             </div>
           </div>
 
@@ -69,7 +69,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
             </div>
             <div class="stat-content">
               <span class="stat-value">{{ stats.audit }}</span>
-              <span class="stat-label">Audit Logs</span>
+              <span class="stat-label">Audit</span>
             </div>
           </div>
 
@@ -102,7 +102,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
 
         <!-- Content Area -->
         <div class="content-area">
-          <div class="transactions-panel" [class.has-detail]="selectedTransaction">
+          <div class="transactions-panel" [class.has-detail]="selectedTransaction" [class.hidden-mobile]="selectedTransaction">
             <app-transaction-list
               [transactions]="filteredTransactions"
               [loading]="loading"
@@ -133,21 +133,21 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
     .main-content {
       max-width: 1600px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 1.5rem;
     }
 
     .stats-section {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .stat-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border-primary);
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.25rem;
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -157,6 +157,10 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
       &:hover {
         transform: translateY(-2px);
         border-color: var(--border-hover);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
 
       &.total {
@@ -187,6 +191,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
 
       svg {
         width: 24px;
@@ -197,43 +202,48 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
     .stat-content {
       display: flex;
       flex-direction: column;
+      min-width: 0;
     }
 
     .stat-value {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 600;
       color: var(--text-primary);
     }
 
     .stat-label {
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       color: var(--text-tertiary);
+      white-space: nowrap;
     }
 
     .filter-tabs {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      gap: 0.375rem;
+      margin-bottom: 1.25rem;
       padding: 4px;
       background: var(--bg-secondary);
       border-radius: 10px;
       width: fit-content;
       transition: background-color 0.3s ease;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .filter-tab {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
+      gap: 6px;
+      padding: 8px 14px;
       background: transparent;
       border: none;
       border-radius: 8px;
       color: var(--text-tertiary);
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      white-space: nowrap;
 
       &:hover {
         color: var(--text-secondary);
@@ -247,17 +257,17 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
 
       .tab-count {
         background: var(--input-bg);
-        padding: 2px 8px;
-        border-radius: 10px;
-        font-size: 0.75rem;
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 0.6875rem;
       }
     }
 
     .content-area {
       display: flex;
-      gap: 1.5rem;
-      height: calc(100vh - 320px);
-      min-height: 500px;
+      gap: 1.25rem;
+      height: calc(100vh - 280px);
+      min-height: 400px;
     }
 
     .transactions-panel {
@@ -287,7 +297,12 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
       }
     }
 
-    @media (max-width: 1200px) {
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .main-content {
+        padding: 1.25rem;
+      }
+
       .stats-section {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -295,37 +310,146 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
       .content-area {
         flex-direction: column;
         height: auto;
+        min-height: auto;
       }
 
       .transactions-panel,
-      .transactions-panel.has-detail,
+      .transactions-panel.has-detail {
+        flex: none;
+        width: 100%;
+        height: 350px;
+      }
+
       .detail-panel {
         flex: none;
         width: 100%;
-      }
-
-      .transactions-panel {
-        height: 400px;
-      }
-
-      .detail-panel {
         height: auto;
         min-height: 400px;
       }
     }
 
+    /* Mobile */
     @media (max-width: 768px) {
       .main-content {
         padding: 1rem;
       }
 
       .stats-section {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .stat-card {
+        padding: 0.875rem;
+        border-radius: 10px;
+        gap: 0.75rem;
+      }
+
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .stat-value {
+        font-size: 1.25rem;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
       }
 
       .filter-tabs {
-        overflow-x: auto;
         width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      .filter-tab {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 8px;
+      }
+
+      .content-area {
+        height: calc(100vh - 260px);
+        min-height: 300px;
+      }
+
+      .transactions-panel {
+        height: 100%;
+      }
+
+      .transactions-panel.hidden-mobile {
+        display: none;
+      }
+
+      .detail-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 150;
+        height: 100vh;
+        min-height: 100vh;
+        animation: slideUp 0.3s ease;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+
+    /* Small mobile */
+    @media (max-width: 380px) {
+      .main-content {
+        padding: 0.75rem;
+      }
+
+      .stats-section {
+        gap: 0.5rem;
+      }
+
+      .stat-card {
+        padding: 0.75rem;
+        gap: 0.5rem;
+      }
+
+      .stat-icon {
+        width: 36px;
+        height: 36px;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .stat-value {
+        font-size: 1.125rem;
+      }
+
+      .filter-tab {
+        padding: 8px 6px;
+        font-size: 0.75rem;
+
+        .tab-count {
+          padding: 1px 5px;
+          font-size: 0.625rem;
+        }
       }
     }
   `]
@@ -381,10 +505,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  loadTransactions(): void {
-    // Data is now loaded automatically by the service
   }
 
   calculateStats(): void {

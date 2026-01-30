@@ -12,7 +12,7 @@ import { Transaction } from '../../models/transaction.model';
         <h2>Transactions</h2>
         <span class="count">
           <ng-container *ngIf="isFiltered">
-            {{ transactions.length }} of {{ totalCount }} records
+            {{ transactions.length }} of {{ totalCount }}
           </ng-container>
           <ng-container *ngIf="!isFiltered">
             {{ transactions.length }} records
@@ -56,7 +56,7 @@ import { Transaction } from '../../models/transaction.model';
                 {{ tx.artifactId | slice:0:8 }}...
               </span>
               <span class="state-change" *ngIf="tx.previousArtifactState !== tx.newArtifactState">
-                State: {{ tx.previousArtifactState }} → {{ tx.newArtifactState }}
+                {{ tx.previousArtifactState }} → {{ tx.newArtifactState }}
               </span>
             </div>
           </div>
@@ -99,6 +99,7 @@ import { Transaction } from '../../models/transaction.model';
       align-items: center;
       padding: 1rem 1.25rem;
       border-bottom: 1px solid var(--border-primary);
+      flex-shrink: 0;
 
       h2 {
         margin: 0;
@@ -121,6 +122,7 @@ import { Transaction } from '../../models/transaction.model';
       padding: 3rem;
       gap: 1rem;
       color: var(--text-tertiary);
+      flex: 1;
 
       .spinner {
         width: 32px;
@@ -140,6 +142,7 @@ import { Transaction } from '../../models/transaction.model';
       flex: 1;
       overflow-y: auto;
       padding: 0.5rem;
+      -webkit-overflow-scrolling: touch;
 
       &::-webkit-scrollbar {
         width: 8px;
@@ -162,7 +165,7 @@ import { Transaction } from '../../models/transaction.model';
     .transaction-item {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.875rem;
       padding: 1rem;
       margin-bottom: 0.5rem;
       background: var(--bg-tertiary);
@@ -170,10 +173,15 @@ import { Transaction } from '../../models/transaction.model';
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
 
       &:hover {
         background: var(--bg-hover);
         border-color: var(--border-primary);
+      }
+
+      &:active {
+        transform: scale(0.99);
       }
 
       &.selected {
@@ -192,7 +200,7 @@ import { Transaction } from '../../models/transaction.model';
 
     .tx-indicator {
       width: 4px;
-      height: 60px;
+      height: 50px;
       background: var(--text-tertiary);
       border-radius: 2px;
       flex-shrink: 0;
@@ -207,18 +215,20 @@ import { Transaction } from '../../models/transaction.model';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+      gap: 0.5rem;
     }
 
     .tx-type {
-      font-size: 0.6875rem;
+      font-size: 0.625rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 4px;
       background: rgba(139, 148, 158, 0.15);
       color: var(--text-tertiary);
+      flex-shrink: 0;
 
       &.kyc {
         background: rgba(56, 211, 159, 0.15);
@@ -232,43 +242,45 @@ import { Transaction } from '../../models/transaction.model';
     }
 
     .tx-time {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       color: var(--text-muted);
+      flex-shrink: 0;
     }
 
     .tx-id {
       font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       color: var(--text-secondary);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .tx-preview {
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       color: var(--text-tertiary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .tx-meta {
       display: flex;
-      gap: 1rem;
-      font-size: 0.75rem;
+      gap: 0.75rem;
+      font-size: 0.6875rem;
       color: var(--text-muted);
+      flex-wrap: wrap;
 
       span {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 3px;
 
         svg {
-          width: 12px;
-          height: 12px;
+          width: 11px;
+          height: 11px;
         }
       }
     }
@@ -279,8 +291,8 @@ import { Transaction } from '../../models/transaction.model';
       transition: transform 0.2s ease;
 
       svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
       }
     }
 
@@ -294,7 +306,7 @@ import { Transaction } from '../../models/transaction.model';
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 3rem;
+      padding: 3rem 1.5rem;
       text-align: center;
       color: var(--text-muted);
 
@@ -313,6 +325,74 @@ import { Transaction } from '../../models/transaction.model';
 
       span {
         font-size: 0.875rem;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .transaction-list-container {
+        border-radius: 10px;
+      }
+
+      .list-header {
+        padding: 0.875rem 1rem;
+
+        h2 {
+          font-size: 0.9375rem;
+        }
+
+        .count {
+          font-size: 0.75rem;
+        }
+      }
+
+      .transaction-list {
+        padding: 0.375rem;
+      }
+
+      .transaction-item {
+        padding: 0.875rem;
+        margin-bottom: 0.375rem;
+        gap: 0.75rem;
+      }
+
+      .tx-indicator {
+        height: 45px;
+      }
+
+      .tx-id {
+        font-size: 0.6875rem;
+      }
+
+      .tx-preview {
+        font-size: 0.6875rem;
+      }
+
+      .tx-meta {
+        font-size: 0.625rem;
+        gap: 0.5rem;
+      }
+
+      .tx-arrow svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .empty-state {
+        padding: 2rem 1rem;
+
+        svg {
+          width: 40px;
+          height: 40px;
+        }
+
+        p {
+          font-size: 0.9375rem;
+        }
+
+        span {
+          font-size: 0.8125rem;
+        }
       }
     }
   `]

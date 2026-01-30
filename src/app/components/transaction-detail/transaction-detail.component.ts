@@ -10,6 +10,11 @@ import { Transaction } from '../../models/transaction.model';
     <div class="detail-container" *ngIf="transaction">
       <div class="detail-header">
         <div class="header-content">
+          <button class="back-btn" (click)="onClose()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
           <span class="tx-type" [class]="transaction.certificateType?.name?.toLowerCase()">
             {{ transaction.certificateType?.name || 'Unknown' }}
           </span>
@@ -41,7 +46,7 @@ import { Transaction } from '../../models/transaction.model';
           <div class="info-section">
             <h3>Transaction Info</h3>
             <div class="info-grid">
-              <div class="info-item">
+              <div class="info-item full-width">
                 <label>Transaction ID</label>
                 <span class="mono copyable" (click)="copyToClipboard(transaction.transactionId)">
                   {{ transaction.transactionId }}
@@ -51,7 +56,7 @@ import { Transaction } from '../../models/transaction.model';
                   </svg>
                 </span>
               </div>
-              <div class="info-item">
+              <div class="info-item full-width">
                 <label>Artifact ID</label>
                 <span class="mono copyable" (click)="copyToClipboard(transaction.artifactId)">
                   {{ transaction.artifactId }}
@@ -79,7 +84,7 @@ import { Transaction } from '../../models/transaction.model';
             <div class="info-section">
               <h3>Personal Information</h3>
               <div class="info-grid" *ngIf="transaction.data.personal_information as personal">
-                <div class="info-item">
+                <div class="info-item full-width">
                   <label>Full Name</label>
                   <span>{{ personal.first_name }} {{ personal.middle_name }} {{ personal.last_name }}</span>
                 </div>
@@ -256,7 +261,7 @@ import { Transaction } from '../../models/transaction.model';
                 <label>Previous Block Signature</label>
                 <span class="mono block-sig">{{ transaction.previousBlockSignature }}</span>
               </div>
-              <div class="info-item" *ngIf="transaction.previousTransactionId">
+              <div class="info-item full-width" *ngIf="transaction.previousTransactionId">
                 <label>Previous Transaction ID</label>
                 <span class="mono">{{ transaction.previousTransactionId }}</span>
               </div>
@@ -323,6 +328,7 @@ import { Transaction } from '../../models/transaction.model';
       align-items: center;
       padding: 1rem 1.25rem;
       border-bottom: 1px solid var(--border-primary);
+      flex-shrink: 0;
     }
 
     .header-content {
@@ -334,6 +340,31 @@ import { Transaction } from '../../models/transaction.model';
         margin: 0;
         font-size: 1rem;
         font-weight: 600;
+        color: var(--text-primary);
+      }
+    }
+
+    .back-btn {
+      display: none;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-right: 0.25rem;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      &:hover {
+        background: var(--input-bg);
         color: var(--text-primary);
       }
     }
@@ -388,6 +419,9 @@ import { Transaction } from '../../models/transaction.model';
       gap: 0.25rem;
       padding: 0.5rem 1rem;
       border-bottom: 1px solid var(--border-primary);
+      flex-shrink: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .tab {
@@ -400,6 +434,7 @@ import { Transaction } from '../../models/transaction.model';
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      white-space: nowrap;
 
       &:hover {
         background: var(--input-bg);
@@ -416,6 +451,7 @@ import { Transaction } from '../../models/transaction.model';
       flex: 1;
       overflow-y: auto;
       padding: 1rem;
+      -webkit-overflow-scrolling: touch;
 
       &::-webkit-scrollbar {
         width: 8px;
@@ -449,7 +485,7 @@ import { Transaction } from '../../models/transaction.model';
 
       h3 {
         margin: 0 0 0.75rem;
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
         font-weight: 600;
         color: var(--text-tertiary);
         text-transform: uppercase;
@@ -460,12 +496,12 @@ import { Transaction } from '../../models/transaction.model';
     .info-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .info-item {
       background: var(--bg-tertiary);
-      padding: 0.875rem;
+      padding: 0.75rem;
       border-radius: 8px;
       transition: background-color 0.3s ease;
 
@@ -475,17 +511,17 @@ import { Transaction } from '../../models/transaction.model';
 
       label {
         display: block;
-        font-size: 0.6875rem;
+        font-size: 0.625rem;
         font-weight: 500;
         color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
       }
 
       span {
         display: block;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         color: var(--text-secondary);
         word-break: break-all;
       }
@@ -493,7 +529,7 @@ import { Transaction } from '../../models/transaction.model';
 
     .mono {
       font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-      font-size: 0.8125rem !important;
+      font-size: 0.75rem !important;
     }
 
     .copyable {
@@ -517,23 +553,27 @@ import { Transaction } from '../../models/transaction.model';
           opacity: 1;
         }
       }
+
+      &:active {
+        color: var(--accent-green);
+      }
     }
 
     .state-badge {
       display: inline-flex !important;
       align-items: center;
-      padding: 4px 10px;
+      padding: 3px 8px;
       background: rgba(88, 166, 255, 0.1);
       border-radius: 4px;
       font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-      font-size: 0.8125rem !important;
+      font-size: 0.75rem !important;
       color: var(--accent-blue) !important;
     }
 
     .flag-badge {
       display: inline-flex !important;
       align-items: center;
-      padding: 4px 10px;
+      padding: 3px 8px;
       background: rgba(56, 211, 159, 0.1);
       border-radius: 4px;
       font-weight: 500;
@@ -543,14 +583,14 @@ import { Transaction } from '../../models/transaction.model';
     .documents-list {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.625rem;
     }
 
     .document-card {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 1rem;
+      gap: 0.875rem;
+      padding: 0.875rem;
       background: var(--bg-tertiary);
       border: 1px solid var(--border-primary);
       border-radius: 10px;
@@ -569,8 +609,8 @@ import { Transaction } from '../../models/transaction.model';
     }
 
     .doc-icon {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       background: rgba(88, 166, 255, 0.1);
       border-radius: 8px;
       display: flex;
@@ -580,8 +620,8 @@ import { Transaction } from '../../models/transaction.model';
       flex-shrink: 0;
 
       svg {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
       }
     }
 
@@ -591,7 +631,7 @@ import { Transaction } from '../../models/transaction.model';
 
       .doc-type {
         display: block;
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
         font-weight: 500;
         color: var(--text-primary);
         margin-bottom: 2px;
@@ -600,37 +640,39 @@ import { Transaction } from '../../models/transaction.model';
       .doc-number {
         display: block;
         font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
         color: var(--text-tertiary);
         margin-bottom: 4px;
       }
 
       .doc-meta {
         display: flex;
-        gap: 6px;
-        font-size: 0.75rem;
+        gap: 5px;
+        font-size: 0.6875rem;
         color: var(--text-muted);
+        flex-wrap: wrap;
       }
     }
 
     .audit-event {
       background: var(--bg-tertiary);
       border-radius: 10px;
-      padding: 1rem;
+      padding: 0.875rem;
       transition: background-color 0.3s ease;
     }
 
     .event-header {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
+      gap: 0.625rem;
+      margin-bottom: 0.625rem;
+      flex-wrap: wrap;
     }
 
     .event-type {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 4px;
       background: rgba(139, 148, 158, 0.15);
       color: var(--text-tertiary);
@@ -647,20 +689,20 @@ import { Transaction } from '../../models/transaction.model';
     }
 
     .event-data {
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       color: var(--accent-blue);
       font-weight: 500;
     }
 
     .event-context {
       margin: 0;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       color: var(--text-secondary);
       line-height: 1.5;
     }
 
     .block-sig {
-      font-size: 0.75rem !important;
+      font-size: 0.6875rem !important;
       word-break: break-all;
       line-height: 1.6;
     }
@@ -682,7 +724,7 @@ import { Transaction } from '../../models/transaction.model';
       border-bottom: 1px solid var(--border-primary);
 
       span {
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
         font-weight: 500;
         color: var(--text-tertiary);
       }
@@ -697,13 +739,13 @@ import { Transaction } from '../../models/transaction.model';
       border: 1px solid var(--border-primary);
       border-radius: 6px;
       color: var(--text-tertiary);
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       cursor: pointer;
       transition: all 0.2s ease;
 
       svg {
-        width: 14px;
-        height: 14px;
+        width: 13px;
+        height: 13px;
       }
 
       &:hover {
@@ -716,23 +758,118 @@ import { Transaction } from '../../models/transaction.model';
       margin: 0;
       padding: 1rem;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
 
       code {
         font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         color: var(--text-secondary);
         white-space: pre-wrap;
         word-break: break-all;
       }
     }
 
+    /* Mobile */
     @media (max-width: 768px) {
-      .info-grid {
-        grid-template-columns: 1fr;
+      .detail-container {
+        border-radius: 0;
+        border: none;
       }
 
-      .info-item.full-width {
-        grid-column: 1;
+      .detail-header {
+        padding: 0.875rem 1rem;
+      }
+
+      .back-btn {
+        display: flex;
+      }
+
+      .close-btn {
+        display: none;
+      }
+
+      .header-content h2 {
+        font-size: 0.9375rem;
+      }
+
+      .tabs {
+        padding: 0.5rem 0.75rem;
+      }
+
+      .tab {
+        padding: 8px 12px;
+        font-size: 0.8125rem;
+      }
+
+      .detail-content {
+        padding: 0.875rem;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+        gap: 0.625rem;
+      }
+
+      .info-item {
+        padding: 0.625rem;
+
+        label {
+          font-size: 0.5625rem;
+        }
+
+        span {
+          font-size: 0.75rem;
+        }
+
+        &.full-width {
+          grid-column: 1;
+        }
+      }
+
+      .info-section h3 {
+        font-size: 0.6875rem;
+        margin-bottom: 0.625rem;
+      }
+
+      .document-card {
+        padding: 0.75rem;
+        gap: 0.75rem;
+      }
+
+      .doc-icon {
+        width: 36px;
+        height: 36px;
+
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .doc-info {
+        .doc-type {
+          font-size: 0.75rem;
+        }
+
+        .doc-number {
+          font-size: 0.6875rem;
+        }
+
+        .doc-meta {
+          font-size: 0.625rem;
+        }
+      }
+
+      .audit-event {
+        padding: 0.75rem;
+      }
+
+      .event-context {
+        font-size: 0.75rem;
+      }
+
+      pre {
+        padding: 0.75rem;
       }
     }
   `]
@@ -791,7 +928,7 @@ export class TransactionDetailComponent {
 
   copyToClipboard(text: string): void {
     navigator.clipboard.writeText(text).then(() => {
-      // Could add a toast notification here
+      // Visual feedback handled by :active state
     }).catch(err => {
       console.error('Failed to copy:', err);
     });
