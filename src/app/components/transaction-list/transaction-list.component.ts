@@ -83,13 +83,14 @@ import { Transaction } from '../../models/transaction.model';
   `,
   styles: [`
     .transaction-list-container {
-      background: #161b22;
-      border: 1px solid #30363d;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-primary);
       border-radius: 12px;
       height: 100%;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .list-header {
@@ -97,18 +98,18 @@ import { Transaction } from '../../models/transaction.model';
       justify-content: space-between;
       align-items: center;
       padding: 1rem 1.25rem;
-      border-bottom: 1px solid #30363d;
+      border-bottom: 1px solid var(--border-primary);
 
       h2 {
         margin: 0;
         font-size: 1rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--text-primary);
       }
 
       .count {
         font-size: 0.8125rem;
-        color: #8b949e;
+        color: var(--text-tertiary);
       }
     }
 
@@ -119,13 +120,13 @@ import { Transaction } from '../../models/transaction.model';
       justify-content: center;
       padding: 3rem;
       gap: 1rem;
-      color: #8b949e;
+      color: var(--text-tertiary);
 
       .spinner {
         width: 32px;
         height: 32px;
         border: 3px solid rgba(0, 217, 255, 0.1);
-        border-top-color: #00d9ff;
+        border-top-color: var(--accent-cyan);
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
@@ -149,11 +150,11 @@ import { Transaction } from '../../models/transaction.model';
       }
 
       &::-webkit-scrollbar-thumb {
-        background: #30363d;
+        background: var(--scrollbar-thumb);
         border-radius: 4px;
 
         &:hover {
-          background: #484f58;
+          background: var(--scrollbar-thumb-hover);
         }
       }
     }
@@ -164,35 +165,35 @@ import { Transaction } from '../../models/transaction.model';
       gap: 1rem;
       padding: 1rem;
       margin-bottom: 0.5rem;
-      background: #21262d;
+      background: var(--bg-tertiary);
       border: 1px solid transparent;
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        background: #262c36;
-        border-color: #30363d;
+        background: var(--bg-hover);
+        border-color: var(--border-primary);
       }
 
       &.selected {
-        background: #1f3a5f;
-        border-color: #58a6ff;
+        background: rgba(88, 166, 255, 0.15);
+        border-color: var(--accent-blue);
       }
 
       &.kyc .tx-indicator {
-        background: #38d19f;
+        background: var(--accent-green);
       }
 
       &.audit .tx-indicator {
-        background: #58a6ff;
+        background: var(--accent-blue);
       }
     }
 
     .tx-indicator {
       width: 4px;
       height: 60px;
-      background: #8b949e;
+      background: var(--text-tertiary);
       border-radius: 2px;
       flex-shrink: 0;
     }
@@ -217,28 +218,28 @@ import { Transaction } from '../../models/transaction.model';
       padding: 3px 8px;
       border-radius: 4px;
       background: rgba(139, 148, 158, 0.15);
-      color: #8b949e;
+      color: var(--text-tertiary);
 
       &.kyc {
         background: rgba(56, 211, 159, 0.15);
-        color: #38d19f;
+        color: var(--accent-green);
       }
 
       &.audit {
         background: rgba(88, 166, 255, 0.15);
-        color: #58a6ff;
+        color: var(--accent-blue);
       }
     }
 
     .tx-time {
       font-size: 0.75rem;
-      color: #6e7681;
+      color: var(--text-muted);
     }
 
     .tx-id {
       font-family: 'SF Mono', Monaco, 'Courier New', monospace;
       font-size: 0.8125rem;
-      color: #c9d1d9;
+      color: var(--text-secondary);
       margin-bottom: 6px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -247,7 +248,7 @@ import { Transaction } from '../../models/transaction.model';
 
     .tx-preview {
       font-size: 0.8125rem;
-      color: #8b949e;
+      color: var(--text-tertiary);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -258,7 +259,7 @@ import { Transaction } from '../../models/transaction.model';
       display: flex;
       gap: 1rem;
       font-size: 0.75rem;
-      color: #6e7681;
+      color: var(--text-muted);
 
       span {
         display: flex;
@@ -274,7 +275,7 @@ import { Transaction } from '../../models/transaction.model';
 
     .tx-arrow {
       flex-shrink: 0;
-      color: #484f58;
+      color: var(--border-hover);
       transition: transform 0.2s ease;
 
       svg {
@@ -285,7 +286,7 @@ import { Transaction } from '../../models/transaction.model';
 
     .transaction-item:hover .tx-arrow {
       transform: translateX(4px);
-      color: #8b949e;
+      color: var(--text-tertiary);
     }
 
     .empty-state {
@@ -295,7 +296,7 @@ import { Transaction } from '../../models/transaction.model';
       justify-content: center;
       padding: 3rem;
       text-align: center;
-      color: #6e7681;
+      color: var(--text-muted);
 
       svg {
         width: 48px;
@@ -307,7 +308,7 @@ import { Transaction } from '../../models/transaction.model';
       p {
         margin: 0 0 0.5rem;
         font-size: 1rem;
-        color: #8b949e;
+        color: var(--text-tertiary);
       }
 
       span {

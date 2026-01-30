@@ -126,7 +126,8 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
   styles: [`
     .dashboard {
       min-height: 100vh;
-      background: #0d1117;
+      background: var(--bg-primary);
+      transition: background-color 0.3s ease;
     }
 
     .main-content {
@@ -143,8 +144,8 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
     }
 
     .stat-card {
-      background: #161b22;
-      border: 1px solid #30363d;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-primary);
       border-radius: 12px;
       padding: 1.5rem;
       display: flex;
@@ -155,27 +156,27 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
 
       &:hover {
         transform: translateY(-2px);
-        border-color: #484f58;
+        border-color: var(--border-hover);
       }
 
       &.total {
-        .stat-icon { background: rgba(139, 148, 158, 0.1); color: #8b949e; }
-        &:hover { border-color: #8b949e; }
+        .stat-icon { background: rgba(139, 148, 158, 0.1); color: var(--text-tertiary); }
+        &:hover { border-color: var(--text-tertiary); }
       }
 
       &.kyc {
-        .stat-icon { background: rgba(56, 211, 159, 0.1); color: #38d19f; }
-        &:hover { border-color: #38d19f; }
+        .stat-icon { background: rgba(56, 211, 159, 0.1); color: var(--accent-green); }
+        &:hover { border-color: var(--accent-green); }
       }
 
       &.audit {
-        .stat-icon { background: rgba(88, 166, 255, 0.1); color: #58a6ff; }
-        &:hover { border-color: #58a6ff; }
+        .stat-icon { background: rgba(88, 166, 255, 0.1); color: var(--accent-blue); }
+        &:hover { border-color: var(--accent-blue); }
       }
 
       &.other {
-        .stat-icon { background: rgba(210, 153, 34, 0.1); color: #d29922; }
-        &:hover { border-color: #d29922; }
+        .stat-icon { background: rgba(210, 153, 34, 0.1); color: var(--accent-yellow); }
+        &:hover { border-color: var(--accent-yellow); }
       }
     }
 
@@ -201,12 +202,12 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
     .stat-value {
       font-size: 1.75rem;
       font-weight: 600;
-      color: #fff;
+      color: var(--text-primary);
     }
 
     .stat-label {
       font-size: 0.875rem;
-      color: #8b949e;
+      color: var(--text-tertiary);
     }
 
     .filter-tabs {
@@ -214,9 +215,10 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
       gap: 0.5rem;
       margin-bottom: 1.5rem;
       padding: 4px;
-      background: #161b22;
+      background: var(--bg-secondary);
       border-radius: 10px;
       width: fit-content;
+      transition: background-color 0.3s ease;
     }
 
     .filter-tab {
@@ -227,24 +229,24 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
       background: transparent;
       border: none;
       border-radius: 8px;
-      color: #8b949e;
+      color: var(--text-tertiary);
       font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        color: #c9d1d9;
-        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-secondary);
+        background: var(--input-bg);
       }
 
       &.active {
-        background: #21262d;
-        color: #fff;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
       }
 
       .tab-count {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--input-bg);
         padding: 2px 8px;
         border-radius: 10px;
         font-size: 0.75rem;

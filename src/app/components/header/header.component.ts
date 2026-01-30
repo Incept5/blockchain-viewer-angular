@@ -1,7 +1,7 @@
 import { Component, inject, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BlockchainService } from '../../services/blockchain.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -66,18 +66,38 @@ import { BlockchainService } from '../../services/blockchain.service';
             </svg>
             <span>Refresh</span>
           </button>
+
+          <button class="theme-toggle" (click)="onThemeToggle()" [title]="themeService.theme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+            <!-- Sun icon (shown in dark mode) -->
+            <svg *ngIf="themeService.theme() === 'dark'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2"/>
+              <path d="M12 21v2"/>
+              <path d="M4.22 4.22l1.42 1.42"/>
+              <path d="M18.36 18.36l1.42 1.42"/>
+              <path d="M1 12h2"/>
+              <path d="M21 12h2"/>
+              <path d="M4.22 19.78l1.42-1.42"/>
+              <path d="M18.36 5.64l1.42-1.42"/>
+            </svg>
+            <!-- Moon icon (shown in light mode) -->
+            <svg *ngIf="themeService.theme() === 'light'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+          </button>
         </div>
       </div>
     </header>
   `,
   styles: [`
     .header {
-      background: linear-gradient(135deg, #1a1f36 0%, #0d1117 100%);
+      background: linear-gradient(135deg, var(--header-gradient-start) 0%, var(--header-gradient-end) 100%);
       padding: 1rem 2rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--border-primary);
       position: sticky;
       top: 0;
       z-index: 100;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .header-content {
@@ -98,7 +118,7 @@ import { BlockchainService } from '../../services/blockchain.service';
     .logo {
       width: 48px;
       height: 48px;
-      background: linear-gradient(135deg, #00d9ff 0%, #00a3a1 100%);
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-cyan-dark) 100%);
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -117,13 +137,13 @@ import { BlockchainService } from '../../services/blockchain.service';
         margin: 0;
         font-size: 1.5rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--text-primary);
         letter-spacing: -0.5px;
       }
 
       .subtitle {
         font-size: 0.875rem;
-        color: #8b949e;
+        color: var(--text-tertiary);
       }
     }
 
@@ -143,28 +163,28 @@ import { BlockchainService } from '../../services/blockchain.service';
         left: 12px;
         width: 18px;
         height: 18px;
-        color: #8b949e;
+        color: var(--text-tertiary);
         pointer-events: none;
       }
 
       input {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--input-bg);
+        border: 1px solid var(--input-border);
         border-radius: 8px;
         padding: 10px 36px 10px 40px;
         font-size: 0.875rem;
-        color: #fff;
+        color: var(--text-primary);
         width: 280px;
         transition: all 0.2s ease;
 
         &::placeholder {
-          color: #6e7681;
+          color: var(--text-muted);
         }
 
         &:focus {
           outline: none;
-          border-color: #00d9ff;
-          background: rgba(255, 255, 255, 0.08);
+          border-color: var(--accent-cyan);
+          background: var(--input-bg-focus);
           box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
         }
       }
@@ -178,7 +198,7 @@ import { BlockchainService } from '../../services/blockchain.service';
         background: transparent;
         border: none;
         border-radius: 50%;
-        color: #6e7681;
+        color: var(--text-muted);
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -191,7 +211,7 @@ import { BlockchainService } from '../../services/blockchain.service';
         }
 
         &:hover {
-          color: #f85149;
+          color: var(--accent-red);
           background: rgba(248, 81, 73, 0.1);
         }
       }
@@ -202,10 +222,10 @@ import { BlockchainService } from '../../services/blockchain.service';
       align-items: center;
       gap: 6px;
       padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
       border-radius: 8px;
-      color: #c9d1d9;
+      color: var(--text-secondary);
       font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
@@ -217,8 +237,8 @@ import { BlockchainService } from '../../services/blockchain.service';
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
+        background: var(--input-bg-focus);
+        border-color: var(--input-border-hover);
       }
     }
 
@@ -227,7 +247,7 @@ import { BlockchainService } from '../../services/blockchain.service';
       align-items: center;
       gap: 8px;
       padding: 10px 16px;
-      background: linear-gradient(135deg, #00d9ff 0%, #00a3a1 100%);
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-cyan-dark) 100%);
       border: none;
       border-radius: 8px;
       color: white;
@@ -256,6 +276,31 @@ import { BlockchainService } from '../../services/blockchain.service';
       }
     }
 
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      &:hover {
+        background: var(--input-bg-focus);
+        border-color: var(--input-border-hover);
+        color: var(--accent-yellow);
+      }
+    }
+
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -278,6 +323,8 @@ import { BlockchainService } from '../../services/blockchain.service';
   `]
 })
 export class HeaderComponent {
+  themeService = inject(ThemeService);
+
   @Input() searchTerm: string = '';
   @Input() loading: boolean = false;
   @Input() sortOrder: 'newest' | 'oldest' = 'newest';
@@ -300,5 +347,9 @@ export class HeaderComponent {
 
   onRefresh(): void {
     this.refresh.emit();
+  }
+
+  onThemeToggle(): void {
+    this.themeService.toggleTheme();
   }
 }

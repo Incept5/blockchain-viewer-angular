@@ -307,13 +307,14 @@ import { Transaction } from '../../models/transaction.model';
   `,
   styles: [`
     .detail-container {
-      background: #161b22;
-      border: 1px solid #30363d;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-primary);
       border-radius: 12px;
       height: 100%;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .detail-header {
@@ -321,7 +322,7 @@ import { Transaction } from '../../models/transaction.model';
       justify-content: space-between;
       align-items: center;
       padding: 1rem 1.25rem;
-      border-bottom: 1px solid #30363d;
+      border-bottom: 1px solid var(--border-primary);
     }
 
     .header-content {
@@ -333,7 +334,7 @@ import { Transaction } from '../../models/transaction.model';
         margin: 0;
         font-size: 1rem;
         font-weight: 600;
-        color: #fff;
+        color: var(--text-primary);
       }
     }
 
@@ -345,16 +346,16 @@ import { Transaction } from '../../models/transaction.model';
       padding: 4px 10px;
       border-radius: 4px;
       background: rgba(139, 148, 158, 0.15);
-      color: #8b949e;
+      color: var(--text-tertiary);
 
       &.kyc {
         background: rgba(56, 211, 159, 0.15);
-        color: #38d19f;
+        color: var(--accent-green);
       }
 
       &.audit {
         background: rgba(88, 166, 255, 0.15);
-        color: #58a6ff;
+        color: var(--accent-blue);
       }
     }
 
@@ -367,7 +368,7 @@ import { Transaction } from '../../models/transaction.model';
       background: transparent;
       border: none;
       border-radius: 6px;
-      color: #8b949e;
+      color: var(--text-tertiary);
       cursor: pointer;
       transition: all 0.2s ease;
 
@@ -377,8 +378,8 @@ import { Transaction } from '../../models/transaction.model';
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
+        background: var(--input-bg);
+        color: var(--text-primary);
       }
     }
 
@@ -386,7 +387,7 @@ import { Transaction } from '../../models/transaction.model';
       display: flex;
       gap: 0.25rem;
       padding: 0.5rem 1rem;
-      border-bottom: 1px solid #30363d;
+      border-bottom: 1px solid var(--border-primary);
     }
 
     .tab {
@@ -394,20 +395,20 @@ import { Transaction } from '../../models/transaction.model';
       background: transparent;
       border: none;
       border-radius: 6px;
-      color: #8b949e;
+      color: var(--text-tertiary);
       font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: #c9d1d9;
+        background: var(--input-bg);
+        color: var(--text-secondary);
       }
 
       &.active {
-        background: #21262d;
-        color: #fff;
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
       }
     }
 
@@ -425,11 +426,11 @@ import { Transaction } from '../../models/transaction.model';
       }
 
       &::-webkit-scrollbar-thumb {
-        background: #30363d;
+        background: var(--scrollbar-thumb);
         border-radius: 4px;
 
         &:hover {
-          background: #484f58;
+          background: var(--scrollbar-thumb-hover);
         }
       }
     }
@@ -450,7 +451,7 @@ import { Transaction } from '../../models/transaction.model';
         margin: 0 0 0.75rem;
         font-size: 0.8125rem;
         font-weight: 600;
-        color: #8b949e;
+        color: var(--text-tertiary);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
@@ -463,9 +464,10 @@ import { Transaction } from '../../models/transaction.model';
     }
 
     .info-item {
-      background: #21262d;
+      background: var(--bg-tertiary);
       padding: 0.875rem;
       border-radius: 8px;
+      transition: background-color 0.3s ease;
 
       &.full-width {
         grid-column: 1 / -1;
@@ -475,7 +477,7 @@ import { Transaction } from '../../models/transaction.model';
         display: block;
         font-size: 0.6875rem;
         font-weight: 500;
-        color: #6e7681;
+        color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 4px;
@@ -484,7 +486,7 @@ import { Transaction } from '../../models/transaction.model';
       span {
         display: block;
         font-size: 0.875rem;
-        color: #c9d1d9;
+        color: var(--text-secondary);
         word-break: break-all;
       }
     }
@@ -509,7 +511,7 @@ import { Transaction } from '../../models/transaction.model';
       }
 
       &:hover {
-        color: #58a6ff;
+        color: var(--accent-blue);
 
         svg {
           opacity: 1;
@@ -525,7 +527,7 @@ import { Transaction } from '../../models/transaction.model';
       border-radius: 4px;
       font-family: 'SF Mono', Monaco, 'Courier New', monospace;
       font-size: 0.8125rem !important;
-      color: #58a6ff !important;
+      color: var(--accent-blue) !important;
     }
 
     .flag-badge {
@@ -535,7 +537,7 @@ import { Transaction } from '../../models/transaction.model';
       background: rgba(56, 211, 159, 0.1);
       border-radius: 4px;
       font-weight: 500;
-      color: #38d19f !important;
+      color: var(--accent-green) !important;
     }
 
     .documents-list {
@@ -549,19 +551,19 @@ import { Transaction } from '../../models/transaction.model';
       align-items: center;
       gap: 1rem;
       padding: 1rem;
-      background: #21262d;
-      border: 1px solid #30363d;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-primary);
       border-radius: 10px;
       transition: border-color 0.2s ease;
 
       &:hover {
-        border-color: #484f58;
+        border-color: var(--border-hover);
       }
 
       &.vault {
         .doc-icon {
           background: rgba(210, 153, 34, 0.1);
-          color: #d29922;
+          color: var(--accent-yellow);
         }
       }
     }
@@ -574,7 +576,7 @@ import { Transaction } from '../../models/transaction.model';
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #58a6ff;
+      color: var(--accent-blue);
       flex-shrink: 0;
 
       svg {
@@ -591,7 +593,7 @@ import { Transaction } from '../../models/transaction.model';
         display: block;
         font-size: 0.875rem;
         font-weight: 500;
-        color: #fff;
+        color: var(--text-primary);
         margin-bottom: 2px;
       }
 
@@ -599,7 +601,7 @@ import { Transaction } from '../../models/transaction.model';
         display: block;
         font-family: 'SF Mono', Monaco, 'Courier New', monospace;
         font-size: 0.8125rem;
-        color: #8b949e;
+        color: var(--text-tertiary);
         margin-bottom: 4px;
       }
 
@@ -607,14 +609,15 @@ import { Transaction } from '../../models/transaction.model';
         display: flex;
         gap: 6px;
         font-size: 0.75rem;
-        color: #6e7681;
+        color: var(--text-muted);
       }
     }
 
     .audit-event {
-      background: #21262d;
+      background: var(--bg-tertiary);
       border-radius: 10px;
       padding: 1rem;
+      transition: background-color 0.3s ease;
     }
 
     .event-header {
@@ -630,29 +633,29 @@ import { Transaction } from '../../models/transaction.model';
       padding: 4px 10px;
       border-radius: 4px;
       background: rgba(139, 148, 158, 0.15);
-      color: #8b949e;
+      color: var(--text-tertiary);
 
       &.success {
         background: rgba(56, 211, 159, 0.15);
-        color: #38d19f;
+        color: var(--accent-green);
       }
 
       &.failure {
         background: rgba(248, 81, 73, 0.15);
-        color: #f85149;
+        color: var(--accent-red);
       }
     }
 
     .event-data {
       font-size: 0.8125rem;
-      color: #58a6ff;
+      color: var(--accent-blue);
       font-weight: 500;
     }
 
     .event-context {
       margin: 0;
       font-size: 0.875rem;
-      color: #c9d1d9;
+      color: var(--text-secondary);
       line-height: 1.5;
     }
 
@@ -663,10 +666,11 @@ import { Transaction } from '../../models/transaction.model';
     }
 
     .raw-json {
-      background: #0d1117;
-      border: 1px solid #30363d;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-primary);
       border-radius: 10px;
       overflow: hidden;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .json-header {
@@ -674,13 +678,13 @@ import { Transaction } from '../../models/transaction.model';
       justify-content: space-between;
       align-items: center;
       padding: 0.75rem 1rem;
-      background: #161b22;
-      border-bottom: 1px solid #30363d;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-primary);
 
       span {
         font-size: 0.8125rem;
         font-weight: 500;
-        color: #8b949e;
+        color: var(--text-tertiary);
       }
     }
 
@@ -689,10 +693,10 @@ import { Transaction } from '../../models/transaction.model';
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid #30363d;
+      background: var(--input-bg);
+      border: 1px solid var(--border-primary);
       border-radius: 6px;
-      color: #8b949e;
+      color: var(--text-tertiary);
       font-size: 0.75rem;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -703,8 +707,8 @@ import { Transaction } from '../../models/transaction.model';
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
+        background: var(--input-bg-focus);
+        color: var(--text-primary);
       }
     }
 
@@ -716,7 +720,7 @@ import { Transaction } from '../../models/transaction.model';
       code {
         font-family: 'SF Mono', Monaco, 'Courier New', monospace;
         font-size: 0.75rem;
-        color: #c9d1d9;
+        color: var(--text-secondary);
         white-space: pre-wrap;
         word-break: break-all;
       }
@@ -788,7 +792,6 @@ export class TransactionDetailComponent {
   copyToClipboard(text: string): void {
     navigator.clipboard.writeText(text).then(() => {
       // Could add a toast notification here
-      console.log('Copied to clipboard');
     }).catch(err => {
       console.error('Failed to copy:', err);
     });
